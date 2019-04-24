@@ -1,7 +1,7 @@
 ﻿using UniRx.Toolkit;
 using UnityEngine;
 
-namespace Nagasono.AudioScripts.ADX
+namespace AdxSePlayer
 {
     public class AtomSourcePoolOnUniRx : ObjectPool<CriAtomSource>, IObjectPool
     {

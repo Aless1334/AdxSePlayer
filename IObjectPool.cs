@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Nagasono.AudioScripts.ADX
+namespace AdxSePlayer
 {
     public interface IObjectPool
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Nagasono.AudioScripts.ADX
+namespace AdxSePlayer
 {
     public class AtomSourcePool : IObjectPool
     {

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Nagasono.AudioScripts.ADX
+namespace AdxSePlayer
 {
-    public class AdxAudioManager : MonoBehaviour
+    public class AdxSePlayer : MonoBehaviour
     {
-        private static AdxAudioManager _instance;
+        private static AdxSePlayer _instance;
 
         [SerializeField] private bool _useObjectPoolInUniRx = false;
         [SerializeField] private CriAtomSource _sourcePrefab = null;
