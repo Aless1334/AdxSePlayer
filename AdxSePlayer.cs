@@ -62,30 +62,27 @@ namespace AdxSePlayer
             }
         }
 
-        // サウンド再生
-        public static void PlayAudio(string key)
+        // サウンド再生(volume, pitch設定可能)
+        public static void PlayAudio(string key, float volume = 1.0f, float pitch = 0.0f)
         {
-            _instance.playAudio(key, 1.0f);
+            _instance?.playAudio(key, volume, pitch);
         }
 
-        // 音量を指定してサウンド再生
-        public static void PlayAudio(string key, float audioLevel, bool isConstant = false)
-        {
-            _instance.playAudio(key, audioLevel, isConstant);
-        }
-
-        private void playAudio(string key, float audioLevel, bool isConstant = false)
+        private void playAudio(string key, float volume, float pitch)
         {
             if (!_cueAcb.Exists(key))
             {
+#if DEBUG
                 UnityEngine.Debug.Log("Cue Not Found! :" + key);
+#endif
                 return;
             }
 
             var source = _sourcePool.Rent();
             source.cueSheet = _cueSheetName;
             source.cueName = key;
-            source.volume = audioLevel;
+            source.volume = volume;
+            source.pitch = pitch;
 
             source.Play();
 
