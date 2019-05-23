@@ -7,7 +7,6 @@ namespace AdxSePlayer
     {
         private static AdxSePlayer _instance;
 
-        [SerializeField] private bool _useObjectPoolInUniRx = false;
         [SerializeField] private CriAtomSource _sourcePrefab = null;
         [SerializeField] private string _cueSheetName = null;
 
@@ -34,11 +33,8 @@ namespace AdxSePlayer
         private void Initialize()
         {
             _cueAcb = CriAtom.GetAcb(_cueSheetName);
-
-            if (_useObjectPoolInUniRx)
-                _sourcePool = new AtomSourcePoolOnUniRx {sourcePrefab = _sourcePrefab.gameObject};
-            else
-                _sourcePool = new AtomSourcePool {sourcePrefab = _sourcePrefab.gameObject};
+            
+            _sourcePool = new AtomSourcePoolOnUniRx {sourcePrefab = _sourcePrefab.gameObject};
 
             _activeSources = new List<CriAtomSource>();
             _disableSourceBuffer = new List<CriAtomSource>();
