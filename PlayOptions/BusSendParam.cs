@@ -1,19 +1,40 @@
+using System;
+
 namespace AdxSePlayer.PlayOptions
 {
-    public class BusSendParam:IPlayOption
+    public class BusSendParam : IPlayOption
     {
+        public enum SendLevelMode
+        {
+            Override,
+            Offset,
+        }
+
         private string _busSendTargetName;
         private float _busSendLevel;
+        private SendLevelMode _levelMode;
 
-        public BusSendParam(string busSendTargetName, float value)
+        public BusSendParam(string busSendTargetName, float value, SendLevelMode levelMode = SendLevelMode.Override)
         {
             _busSendTargetName = busSendTargetName;
             _busSendLevel = value;
+            _levelMode = SendLevelMode.Override;
         }
 
         public CriAtomSource ApplySetting(CriAtomSource target)
         {
-            target.SetBusSendLevel(_busSendTargetName, _busSendLevel);
+            switch (_levelMode)
+            {
+                case SendLevelMode.Override:
+                    target.SetBusSendLevel(_busSendTargetName, _busSendLevel);
+                    break;
+                case SendLevelMode.Offset:
+                    target.SetBusSendLevelOffset(_busSendTargetName, _busSendLevel);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             return target;
         }
     }
