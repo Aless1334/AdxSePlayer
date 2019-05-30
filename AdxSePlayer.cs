@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AdxSePlayer.PlayOptions;
 using UnityEngine;
 
 namespace AdxSePlayer
@@ -59,12 +60,12 @@ namespace AdxSePlayer
         }
 
         // サウンド再生(volume, pitch設定可能)
-        public static void PlayAudio(string key, float volume = 1.0f, float pitch = 0.0f)
+        public static void PlayAudio(string key, params IPlayOption[] options)
         {
-            _instance?.playAudio(key, volume, pitch);
+            _instance?.playAudio(key, options);
         }
 
-        private void playAudio(string key, float volume, float pitch)
+        private void playAudio(string key, params IPlayOption[] options)
         {
             if (!_cueAcb.Exists(key))
             {
@@ -77,9 +78,12 @@ namespace AdxSePlayer
             var source = _sourcePool.Rent();
             source.cueSheet = _cueSheetName;
             source.cueName = key;
-            source.volume = volume;
-            source.pitch = pitch;
 
+            foreach (var option in options)
+            {
+                option.ApplySetting(source);
+            }
+            
             source.Play();
 
             _activeSources.Add(source);
