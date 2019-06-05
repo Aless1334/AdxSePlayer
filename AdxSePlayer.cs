@@ -37,9 +37,9 @@ namespace AdxSePlayer
             _cueAcb = CriAtom.GetAcb(_cueSheetName);
 
             if (_useObjectPoolInUniRx)
-                _sourcePool = new AtomSourcePoolOnUniRx {sourcePrefab = _sourcePrefab.gameObject};
+                _sourcePool = new AtomSourcePoolOnUniRx(_sourcePrefab.gameObject);
             else
-                _sourcePool = new AtomSourcePool {sourcePrefab = _sourcePrefab.gameObject};
+                _sourcePool = new AtomSourcePool(_sourcePrefab.gameObject);
 
             _activeSources = new List<CriAtomSource>();
             _disableSourceBuffer = new List<CriAtomSource>();
