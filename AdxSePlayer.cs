@@ -35,9 +35,9 @@ namespace AdxSePlayer
         {
             _cueAcb = CriAtom.GetAcb(_cueSheetName);
 
-            _sourcePool = new AtomSourcePool {sourcePrefab = _sourcePrefab.gameObject};
+            _sourcePool = new AtomSourcePool(_sourcePrefab.gameObject);
 
-            _activeSources = new List<CriAtomSource>();
+                _activeSources = new List<CriAtomSource>();
             _disableSourceBuffer = new List<CriAtomSource>();
         }
 
