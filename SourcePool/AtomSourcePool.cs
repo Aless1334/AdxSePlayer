@@ -5,30 +5,41 @@ namespace AdxSePlayer
 {
     public class AtomSourcePool : IObjectPool
     {
+        private const float DefaultVolume = 1.0f;
+        private const float DefaultPitch = 0.0f;
+        
         public GameObject sourcePrefab { private get; set; }
 
         private List<CriAtomSource> _atomSourceList;
 
-        public AtomSourcePool()
+        public AtomSourcePool(GameObject sourcePrefab)
         {
             _atomSourceList = new List<CriAtomSource>();
+            this.sourcePrefab = sourcePrefab;
         }
 
         public CriAtomSource Rent()
         {
             if (_atomSourceList.Count == 0)
             {
-                return GenerateNewSource();
+                return SetDefaultParameter(GenerateNewSource());
             }
 
             foreach (var atomSource in _atomSourceList)
             {
                 if (atomSource.gameObject.activeSelf) continue;
                 atomSource.gameObject.SetActive(true);
-                return atomSource;
+                return SetDefaultParameter(atomSource);
             }
 
-            return GenerateNewSource();
+            return SetDefaultParameter(GenerateNewSource());
+        }
+
+        private CriAtomSource SetDefaultParameter(CriAtomSource source)
+        {
+            source.volume = DefaultVolume;
+            source.pitch = DefaultPitch;
+            return source;
         }
 
         private CriAtomSource GenerateNewSource()
