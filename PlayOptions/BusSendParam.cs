@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace AdxSePlayer.PlayOptions
 {
@@ -17,7 +18,7 @@ namespace AdxSePlayer.PlayOptions
         public BusSendParam(string busSendTargetName, float value, SendLevelMode levelMode = SendLevelMode.Override)
         {
             _busSendTargetName = busSendTargetName;
-            _busSendLevel = value;
+            _busSendLevel = Mathf.Clamp01(value);
             _levelMode = SendLevelMode.Override;
         }
 
