@@ -5,9 +5,6 @@ namespace AdxSePlayer
 {
     public class AtomSourcePoolOnUniRx : IObjectPool
     {
-        private const float DefaultVolume = 1.0f;
-        private const float DefaultPitch = 0.0f;
-        
         private ObjectPool<CriAtomSource> _originPool;
         
         public GameObject sourcePrefab { private get; set; }
@@ -25,8 +22,7 @@ namespace AdxSePlayer
         
         private CriAtomSource SetDefaultParameter(CriAtomSource source)
         {
-            source.volume = DefaultVolume;
-            source.pitch = DefaultPitch;
+            source.player.ResetParameters();
             return source;
         }
 
