@@ -1,7 +1,7 @@
 ﻿using UniRx.Toolkit;
 using UnityEngine;
 
-namespace AdxSePlayer
+namespace AdxSePlayer.SourcePool
 {
     public class SourceUniRxPoolOrigin : ObjectPool<CriAtomSource>
     {

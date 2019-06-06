@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace AdxSePlayer
+namespace AdxSePlayer.SourcePool
 {
     public class AtomSourcePool : IObjectPool
     {
-        private const float DefaultVolume = 1.0f;
-        private const float DefaultPitch = 0.0f;
-        
         public GameObject sourcePrefab { private get; set; }
 
         private List<CriAtomSource> _atomSourceList;
@@ -37,8 +34,7 @@ namespace AdxSePlayer
 
         private CriAtomSource SetDefaultParameter(CriAtomSource source)
         {
-            source.volume = DefaultVolume;
-            source.pitch = DefaultPitch;
+            source.player.ResetParameters();
             return source;
         }
 
