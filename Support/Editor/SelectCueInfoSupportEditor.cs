@@ -24,12 +24,28 @@ namespace AdxSePlayer.Support.Editor
                 }
             }
 
-            var _cueSheetNames = new string[_atomObject.cueSheets.Length];
-            for (var i = 0; i < _cueSheetNames.Length; i++)
-                _cueSheetNames[i] = _atomObject.cueSheets[i].name;
+            var cueSheetNames = new string[_atomObject.cueSheets.Length];
+            for (var i = 0; i < cueSheetNames.Length; i++)
+                cueSheetNames[i] = _atomObject.cueSheets[i].name;
+
+            var atom = _atomObject.GetType();
+            var func = (CriAtomExAcb) atom.InvokeMember("LoadAcbFile",
+                BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance, null, _atomObject, new[]
+                {
+                    null,
+                    _atomObject.cueSheets[selectCue.selectedSheetIndex].acbFile,
+                    _atomObject.cueSheets[selectCue.selectedSheetIndex].awbFile
+                });
+
+            var cueNames = new string[func.GetCueInfoList().Length];
+            for (var i = 0; i < cueNames.Length; i++)
+                cueNames[i] = func.GetCueInfoList()[i].name;
 
             selectCue.selectedSheetIndex =
-                EditorGUILayout.Popup("Cue Sheet", selectCue.selectedSheetIndex, _cueSheetNames);
+                EditorGUILayout.Popup("Cue Sheet", selectCue.selectedSheetIndex, cueSheetNames);
+
+            selectCue.selectedCueIndex =
+                EditorGUILayout.Popup("Cue Name", selectCue.selectedCueIndex, cueNames);
 
             EditorUtility.SetDirty(selectCue);
         }
