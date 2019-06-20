@@ -16,6 +16,9 @@ namespace AdxSePlayer.Support.Editor
 
             if (!_atomObject)
             {
+                CriAtomEx.UnregisterAcf();
+                CriAtomPlugin.InitializeLibrary();
+                
                 _atomObject = FindObjectOfType<CriAtom>();
                 if (!_atomObject)
                 {
@@ -41,11 +44,24 @@ namespace AdxSePlayer.Support.Editor
             for (var i = 0; i < cueNames.Length; i++)
                 cueNames[i] = func.GetCueInfoList()[i].name;
 
+            var lastSheetIndex = selectCue.selectedSheetIndex;
+            var lastCueIndex = selectCue.selectedCueIndex;
+
             selectCue.selectedSheetIndex =
                 EditorGUILayout.Popup("Cue Sheet", selectCue.selectedSheetIndex, cueSheetNames);
 
             selectCue.selectedCueIndex =
                 EditorGUILayout.Popup("Cue Name", selectCue.selectedCueIndex, cueNames);
+
+            if (lastSheetIndex != selectCue.selectedSheetIndex)
+            {
+                selectCue.cueSheetName = _atomObject.cueSheets[selectCue.selectedSheetIndex].name;
+            }
+            
+            if (lastCueIndex != selectCue.selectedCueIndex)
+            {
+                selectCue.cueName = cueNames[selectCue.selectedCueIndex];
+            }
 
             EditorUtility.SetDirty(selectCue);
         }

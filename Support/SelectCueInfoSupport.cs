@@ -14,7 +14,6 @@ namespace AdxSePlayer.Support
             get { return _cueSheetName; }
             set
             {
-                if (_cueSheetName.Equals(value)) return;
                 if (!_atomSource) _atomSource = GetComponent<CriAtomSource>();
 
                 _cueSheetName = value;
@@ -29,7 +28,6 @@ namespace AdxSePlayer.Support
             get { return _cueName; }
             set
             {
-                if (_cueName.Equals(value)) return;
                 if (!_atomSource) _atomSource = GetComponent<CriAtomSource>();
 
                 _cueName = value;
