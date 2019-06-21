@@ -27,8 +27,10 @@ namespace AdxSePlayer.Support.Editor
             var cueSheetNames = GetCueSheetNameArray();
             
             // 選択したシートのキュー名のリストを取得
-            var cueNames = LoadCueNameArray(GetAcbData(_atomObject.cueSheets[selectCue.selectedSheetIndex].acbFile,
-                _atomObject.cueSheets[selectCue.selectedSheetIndex].awbFile));
+            var targetAcb = GetAcbData(_atomObject.cueSheets[selectCue.selectedSheetIndex].acbFile,
+                _atomObject.cueSheets[selectCue.selectedSheetIndex].awbFile);
+            
+            var cueNames = LoadCueNameArray(targetAcb);
 
             // 数値バッファリング
             var lastSheetIndex = selectCue.selectedSheetIndex;
@@ -37,19 +39,24 @@ namespace AdxSePlayer.Support.Editor
             selectCue.selectedSheetIndex =
                 EditorGUILayout.Popup("Cue Sheet", selectCue.selectedSheetIndex, cueSheetNames);
 
-            selectCue.selectedCueIndex =
-                EditorGUILayout.Popup("Cue Name", selectCue.selectedCueIndex, cueNames);
+            if (cueNames == null)
+                EditorGUILayout.LabelField("Acb Can't Load.");
+            else
+                selectCue.selectedCueIndex =
+                    EditorGUILayout.Popup("Cue Name", selectCue.selectedCueIndex, cueNames);
 
             // 変更があった場合、AtomSourceの値を変更
             if (lastSheetIndex != selectCue.selectedSheetIndex)
             {
                 selectCue.cueSheetName = _atomObject.cueSheets[selectCue.selectedSheetIndex].name;
                 selectCue.selectedCueIndex = 0;
-                selectCue.cueName = GetAcbData(_atomObject.cueSheets[selectCue.selectedSheetIndex].acbFile,
-                        _atomObject.cueSheets[selectCue.selectedSheetIndex].awbFile)
-                    .GetCueInfoList()[selectCue.selectedCueIndex].name;
+                var selectAcb = GetAcbData(_atomObject.cueSheets[selectCue.selectedSheetIndex].acbFile,
+                    _atomObject.cueSheets[selectCue.selectedSheetIndex].awbFile);
+                if (selectAcb != null)
+                    selectCue.cueName = selectAcb
+                        .GetCueInfoList()[selectCue.selectedCueIndex].name;
             }
-            else if (lastCueIndex != selectCue.selectedCueIndex)
+            else if (cueNames != null && lastCueIndex != selectCue.selectedCueIndex)
             {
                 selectCue.cueName = cueNames[selectCue.selectedCueIndex];
             }
@@ -58,7 +65,7 @@ namespace AdxSePlayer.Support.Editor
             EditorUtility.SetDirty(selectCue);
         }
 
-        private CriAtom PrepareAtom()
+        private static CriAtom PrepareAtom()
         {
             CriAtomEx.UnregisterAcf();
             CriAtomPlugin.InitializeLibrary();
@@ -85,8 +92,9 @@ namespace AdxSePlayer.Support.Editor
                 });
         }
 
-        private string[] LoadCueNameArray(CriAtomExAcb acbData)
+        private static string[] LoadCueNameArray(CriAtomExAcb acbData)
         {
+            if (acbData == null) return null;
             var cueInfoList = acbData.GetCueInfoList();
             var cueNames = new string[cueInfoList.Length];
 
