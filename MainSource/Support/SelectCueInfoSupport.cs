@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AdxSePlayer.Support
+namespace AdxSePlayer.MainSource.Support
 {
     [RequireComponent(typeof(CriAtomSource))]
     public class SelectCueInfoSupport : MonoBehaviour

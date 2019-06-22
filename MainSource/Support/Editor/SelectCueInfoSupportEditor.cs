@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using UnityEditor;
 
-namespace AdxSePlayer.Support.Editor
+namespace AdxSePlayer.MainSource.Support.Editor
 {
     [CustomEditor(typeof(SelectCueInfoSupport))]
     public class SelectCueInfoSupportEditor : UnityEditor.Editor

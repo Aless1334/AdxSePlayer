@@ -1,4 +1,4 @@
-namespace AdxSePlayer.PlayOptions
+namespace AdxSePlayer.MainSource.PlayOptions
 {
     public interface IPlayOption
     {

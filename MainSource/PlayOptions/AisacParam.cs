@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace AdxSePlayer.PlayOptions
+namespace AdxSePlayer.MainSource.PlayOptions
 {
     public class AisacParam : IPlayOption
     {
