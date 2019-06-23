@@ -29,7 +29,15 @@ namespace AdxSePlayer.MainSource.DataManage
             }
         }
 
-        public static string[] CueSheetNameArray => _proceedStrings;
+        public static string[] CueSheetNameArray
+        {
+
+            get
+            {
+                CallUpdateAcbInfo();
+                return _proceedStrings;
+            }
+        }
 
         private static void UpdateAcbInfo(CriAtom atomComponent)
         {

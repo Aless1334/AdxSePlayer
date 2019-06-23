@@ -19,7 +19,7 @@ namespace AdxSePlayer.MainSource.Support.Editor
                 _atomObject = PrepareAtom();
                 if (!_atomObject)
                 {
-                    EditorGUILayout.LabelField("Please make CriAtom in Hiserarchy.");
+                    EditorGUILayout.LabelField("Please make CriAtom in Hierarchy.");
                     return;
                 }
             }
