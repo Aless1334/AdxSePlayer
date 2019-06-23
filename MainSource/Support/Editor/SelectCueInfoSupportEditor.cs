@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AdxSePlayer.MainSource.AttachComponents;
 using AdxSePlayer.MainSource.DataManage;
 using UnityEditor;
 
@@ -7,22 +8,12 @@ namespace AdxSePlayer.MainSource.Support.Editor
     [CustomEditor(typeof(SelectCueInfoSupport))]
     public class SelectCueInfoSupportEditor : UnityEditor.Editor
     {
-        private CriAtom _atomObject;
-
         public override void OnInspectorGUI()
         {
             var selectCue = target as SelectCueInfoSupport;
             if (!selectCue) return;
 
-            if (!_atomObject)
-            {
-                _atomObject = PrepareAtom();
-                if (!_atomObject)
-                {
-                    EditorGUILayout.LabelField("Please make CriAtom in Hierarchy.");
-                    return;
-                }
-            }
+            if (!UsingAcbData.IsHavingAtomComponent) return;
 
             // キューシート名のリストを取得
             var cueSheetNames = UsingAcbData.CueSheetNameArray;
@@ -46,7 +37,7 @@ namespace AdxSePlayer.MainSource.Support.Editor
             // 変更があった場合、AtomSourceの値を変更
             if (lastSheetIndex != selectCue.selectedSheetIndex)
             {
-                selectCue.cueSheetName = _atomObject.cueSheets[selectCue.selectedSheetIndex].name;
+                selectCue.cueSheetName = cueSheetNames[selectCue.selectedSheetIndex];
                 selectCue.selectedCueIndex = 0;
                 var selectAcb = UsingAcbData.AcbArray[selectCue.selectedSheetIndex];
                 if (selectAcb != null)
@@ -60,14 +51,6 @@ namespace AdxSePlayer.MainSource.Support.Editor
 
             // 変更の反映
             EditorUtility.SetDirty(selectCue);
-        }
-
-        private static CriAtom PrepareAtom()
-        {
-            CriAtomEx.UnregisterAcf();
-            CriAtomPlugin.InitializeLibrary();
-
-            return FindObjectOfType<CriAtom>();
         }
     }
 }

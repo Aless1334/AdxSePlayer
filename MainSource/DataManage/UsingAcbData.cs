@@ -5,11 +5,22 @@ namespace AdxSePlayer.MainSource.DataManage
 {
     public static class UsingAcbData
     {
+        private static CriAtom _atomComponent;
+        
         private static CriAtomExAcb[] _acbArray;
 
         private static string[] _proceedStrings;
 
         private static ArrayInCriAtomExAcb[] _loadedAcbDataList;
+
+        public static bool IsHavingAtomComponent
+        {
+            get
+            {
+                _atomComponent = Object.FindObjectOfType<CriAtom>();
+                return _atomComponent != null;
+            }
+        }
 
         public static CriAtomExAcb[] AcbArray
         {
@@ -64,21 +75,29 @@ namespace AdxSePlayer.MainSource.DataManage
 
         private static void CallUpdateAcbInfo()
         {
-            var atomComponent = Object.FindObjectOfType<CriAtom>();
+            if (_atomComponent == null)
+            {
+                _atomComponent = Object.FindObjectOfType<CriAtom>();
+                if (_atomComponent == null)
+                {
+                    Debug.LogError("CriAtom コンポーネントがシーン内に存在しません。");
+                    return;
+                }
+            }
 
-            var sheetNameList = GetCueSheetNameArray(atomComponent);
+            var sheetNameList = GetCueSheetNameArray(_atomComponent);
 
             if (_proceedStrings == null || _acbArray == null)
             {
                 _proceedStrings = sheetNameList;
-                UpdateAcbInfo(atomComponent);
+                UpdateAcbInfo(_atomComponent);
                 return;
             }
 
             if (_proceedStrings.Length != sheetNameList.Length)
             {
                 _proceedStrings = sheetNameList;
-                UpdateAcbInfo(atomComponent);
+                UpdateAcbInfo(_atomComponent);
                 return;
             }
 
@@ -87,7 +106,7 @@ namespace AdxSePlayer.MainSource.DataManage
                 if (_proceedStrings[i].Equals(sheetNameList[i])) continue;
 
                 _proceedStrings = sheetNameList;
-                UpdateAcbInfo(atomComponent);
+                UpdateAcbInfo(_atomComponent);
                 return;
             }
         }

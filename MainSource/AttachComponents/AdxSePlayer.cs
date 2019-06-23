@@ -3,7 +3,7 @@ using AdxSePlayer.MainSource.PlayOptions;
 using AdxSePlayer.MainSource.SourcePool;
 using UnityEngine;
 
-namespace AdxSePlayer.MainSource
+namespace AdxSePlayer.MainSource.AttachComponents
 {
     public class AdxSePlayer : MonoBehaviour
     {
