@@ -1,14 +1,15 @@
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
-namespace AdxSePlayer.MainSource
+namespace AdxSePlayer.MainSource.DataManage
 {
     public static class UsingAcbData
     {
         private static CriAtomExAcb[] _acbArray;
 
         private static string[] _proceedStrings;
+
+        private static ArrayInCriAtomExAcb[] _loadedAcbDataList;
 
         public static CriAtomExAcb[] AcbArray
         {
@@ -18,6 +19,17 @@ namespace AdxSePlayer.MainSource
                 return _acbArray;
             }
         }
+
+        public static ArrayInCriAtomExAcb[] LoadedAcbDataList
+        {
+            get
+            {
+                CallUpdateAcbInfo();
+                return _loadedAcbDataList;
+            }
+        }
+
+        public static string[] CueSheetNameArray => _proceedStrings;
 
         private static void UpdateAcbInfo(CriAtom atomComponent)
         {
@@ -30,12 +42,15 @@ namespace AdxSePlayer.MainSource
             CriAtomEx.UnregisterAcf();
             CriAtomPlugin.InitializeLibrary();
 
+            _loadedAcbDataList = new ArrayInCriAtomExAcb[atomComponent.cueSheets.Length];
+
             _acbArray = new CriAtomExAcb[atomComponent.cueSheets.Length];
             for (var i = 0; i < _acbArray.Length; i++)
             {
                 _acbArray[i] = CriAtomExAcb.LoadAcbFile(null,
                     Application.streamingAssetsPath + "/" + atomComponent.cueSheets[i].acbFile,
                     Application.streamingAssetsPath + "/" + atomComponent.cueSheets[i].awbFile);
+                _loadedAcbDataList[i] = new ArrayInCriAtomExAcb(_acbArray[i]);
             }
         }
 

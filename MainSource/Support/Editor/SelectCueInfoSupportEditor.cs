@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AdxSePlayer.MainSource.DataManage;
 using UnityEditor;
 
 namespace AdxSePlayer.MainSource.Support.Editor
@@ -18,18 +19,16 @@ namespace AdxSePlayer.MainSource.Support.Editor
                 _atomObject = PrepareAtom();
                 if (!_atomObject)
                 {
-                    EditorGUILayout.LabelField("Please make CriAtom in Hierarchy.");
+                    EditorGUILayout.LabelField("Please make CriAtom in Hiserarchy.");
                     return;
                 }
             }
 
             // キューシート名のリストを取得
-            var cueSheetNames = GetCueSheetNameArray();
+            var cueSheetNames = UsingAcbData.CueSheetNameArray;
             
             // 選択したシートのキュー名のリストを取得
-            var targetAcb = UsingAcbData.AcbArray[selectCue.selectedSheetIndex];
-            
-            var cueNames = LoadCueNameArray(targetAcb);
+            var cueNames = UsingAcbData.LoadedAcbDataList[selectCue.selectedSheetIndex].CueNames;
 
             // 数値バッファリング
             var lastSheetIndex = selectCue.selectedSheetIndex;
@@ -69,37 +68,6 @@ namespace AdxSePlayer.MainSource.Support.Editor
             CriAtomPlugin.InitializeLibrary();
 
             return FindObjectOfType<CriAtom>();
-        }
-
-        private string[] GetCueSheetNameArray()
-        {
-            var sheetList = _atomObject.cueSheets;
-            var sheetNameList = new string[sheetList.Length];
-            for (var i = 0; i < sheetList.Length; i++)
-                sheetNameList[i] = sheetList[i].name;
-
-            return sheetNameList;
-        }
-
-//        private CriAtomExAcb GetAcbData(string targetAcbName, string targetAwbName = "")
-//        {
-//            return (CriAtomExAcb) _atomObject.GetType().InvokeMember("LoadAcbFile",
-//                BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance, null, _atomObject, new[]
-//                {
-//                    null, targetAcbName, targetAwbName
-//                });
-//        }
-
-        private static string[] LoadCueNameArray(CriAtomExAcb acbData)
-        {
-            if (acbData == null) return null;
-            var cueInfoList = acbData.GetCueInfoList();
-            var cueNames = new string[cueInfoList.Length];
-
-            for (var i = 0; i < cueInfoList.Length; i++)
-                cueNames[i] = cueInfoList[i].name;
-
-            return cueNames;
         }
     }
 }
