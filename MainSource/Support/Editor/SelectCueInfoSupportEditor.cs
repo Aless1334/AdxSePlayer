@@ -27,8 +27,7 @@ namespace AdxSePlayer.MainSource.Support.Editor
             var cueSheetNames = GetCueSheetNameArray();
             
             // 選択したシートのキュー名のリストを取得
-            var targetAcb = GetAcbData(_atomObject.cueSheets[selectCue.selectedSheetIndex].acbFile,
-                _atomObject.cueSheets[selectCue.selectedSheetIndex].awbFile);
+            var targetAcb = UsingAcbData.AcbArray[selectCue.selectedSheetIndex];
             
             var cueNames = LoadCueNameArray(targetAcb);
 
@@ -50,8 +49,7 @@ namespace AdxSePlayer.MainSource.Support.Editor
             {
                 selectCue.cueSheetName = _atomObject.cueSheets[selectCue.selectedSheetIndex].name;
                 selectCue.selectedCueIndex = 0;
-                var selectAcb = GetAcbData(_atomObject.cueSheets[selectCue.selectedSheetIndex].acbFile,
-                    _atomObject.cueSheets[selectCue.selectedSheetIndex].awbFile);
+                var selectAcb = UsingAcbData.AcbArray[selectCue.selectedSheetIndex];
                 if (selectAcb != null)
                     selectCue.cueName = selectAcb
                         .GetCueInfoList()[selectCue.selectedCueIndex].name;
@@ -83,14 +81,14 @@ namespace AdxSePlayer.MainSource.Support.Editor
             return sheetNameList;
         }
 
-        private CriAtomExAcb GetAcbData(string targetAcbName, string targetAwbName = "")
-        {
-            return (CriAtomExAcb) _atomObject.GetType().InvokeMember("LoadAcbFile",
-                BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance, null, _atomObject, new[]
-                {
-                    null, targetAcbName, targetAwbName
-                });
-        }
+//        private CriAtomExAcb GetAcbData(string targetAcbName, string targetAwbName = "")
+//        {
+//            return (CriAtomExAcb) _atomObject.GetType().InvokeMember("LoadAcbFile",
+//                BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance, null, _atomObject, new[]
+//                {
+//                    null, targetAcbName, targetAwbName
+//                });
+//        }
 
         private static string[] LoadCueNameArray(CriAtomExAcb acbData)
         {
