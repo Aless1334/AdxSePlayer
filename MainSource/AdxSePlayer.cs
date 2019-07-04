@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using AdxSePlayer.PlayOptions;
-using AdxSePlayer.SourcePool;
+using Aless.MainSource.PlayOptions;
+using Aless.MainSource.SourcePool;
 using UnityEngine;
 
-namespace AdxSePlayer
+namespace Aless.MainSource
 {
     public class AdxSePlayer : MonoBehaviour
     {
