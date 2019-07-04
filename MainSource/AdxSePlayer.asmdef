@@ -1,8 +1,7 @@
 {
     "name": "AdxSePlayer",
     "references": [
-        "CriWare",
-        "UniRx"
+        "CriWare"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
