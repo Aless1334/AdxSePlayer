@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace AdxSePlayer.PlayOptions
+namespace Aless.MainSource.PlayOptions
 {
     public class BusSendParam : IPlayOption
     {
