@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using AdxSePlayer.MainSource.DataManage;
+﻿using Aless.MainSource.DataManage;
+using Aless.MainSource.Support;
 using UnityEditor;
 
-namespace AdxSePlayer.MainSource.Support.Editor
+namespace Aless.Editor.Support
 {
     [CustomEditor(typeof(SelectCueInfoSupport))]
     public class SelectCueInfoSupportEditor : UnityEditor.Editor

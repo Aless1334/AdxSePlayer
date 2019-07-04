@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AdxSePlayer.MainSource.DataManage
+namespace Aless.MainSource.DataManage
 {
     public static class UsingAcbData
     {

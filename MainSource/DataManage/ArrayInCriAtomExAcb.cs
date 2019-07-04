@@ -1,4 +1,4 @@
-namespace AdxSePlayer.MainSource.DataManage
+namespace Aless.MainSource.DataManage
 {
     public class ArrayInCriAtomExAcb
     {

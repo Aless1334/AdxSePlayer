@@ -1,4 +1,4 @@
-namespace AdxSePlayer.MainSource.PlayOptions
+namespace Aless.MainSource.PlayOptions
 {
     public class VolumeParam : IPlayOption
     {
