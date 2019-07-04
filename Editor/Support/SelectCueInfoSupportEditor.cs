@@ -1,7 +1,8 @@
-﻿using System.Reflection;
+﻿using Aless.MainSource.DataManage;
+using Aless.MainSource.Support;
 using UnityEditor;
 
-namespace AdxSePlayer.MainSource.Support.Editor
+namespace Aless.Editor.Support
 {
     [CustomEditor(typeof(SelectCueInfoSupport))]
     public class SelectCueInfoSupportEditor : UnityEditor.Editor
@@ -24,13 +25,10 @@ namespace AdxSePlayer.MainSource.Support.Editor
             }
 
             // キューシート名のリストを取得
-            var cueSheetNames = GetCueSheetNameArray();
+            var cueSheetNames = UsingAcbData.CueSheetNameArray;
             
             // 選択したシートのキュー名のリストを取得
-            var targetAcb = GetAcbData(_atomObject.cueSheets[selectCue.selectedSheetIndex].acbFile,
-                _atomObject.cueSheets[selectCue.selectedSheetIndex].awbFile);
-            
-            var cueNames = LoadCueNameArray(targetAcb);
+            var cueNames = UsingAcbData.LoadedAcbDataList[selectCue.selectedSheetIndex].CueNames;
 
             // 数値バッファリング
             var lastSheetIndex = selectCue.selectedSheetIndex;
@@ -50,8 +48,7 @@ namespace AdxSePlayer.MainSource.Support.Editor
             {
                 selectCue.cueSheetName = _atomObject.cueSheets[selectCue.selectedSheetIndex].name;
                 selectCue.selectedCueIndex = 0;
-                var selectAcb = GetAcbData(_atomObject.cueSheets[selectCue.selectedSheetIndex].acbFile,
-                    _atomObject.cueSheets[selectCue.selectedSheetIndex].awbFile);
+                var selectAcb = UsingAcbData.AcbArray[selectCue.selectedSheetIndex];
                 if (selectAcb != null)
                     selectCue.cueName = selectAcb
                         .GetCueInfoList()[selectCue.selectedCueIndex].name;
@@ -71,37 +68,6 @@ namespace AdxSePlayer.MainSource.Support.Editor
             CriAtomPlugin.InitializeLibrary();
 
             return FindObjectOfType<CriAtom>();
-        }
-
-        private string[] GetCueSheetNameArray()
-        {
-            var sheetList = _atomObject.cueSheets;
-            var sheetNameList = new string[sheetList.Length];
-            for (var i = 0; i < sheetList.Length; i++)
-                sheetNameList[i] = sheetList[i].name;
-
-            return sheetNameList;
-        }
-
-        private CriAtomExAcb GetAcbData(string targetAcbName, string targetAwbName = "")
-        {
-            return (CriAtomExAcb) _atomObject.GetType().InvokeMember("LoadAcbFile",
-                BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance, null, _atomObject, new[]
-                {
-                    null, targetAcbName, targetAwbName
-                });
-        }
-
-        private static string[] LoadCueNameArray(CriAtomExAcb acbData)
-        {
-            if (acbData == null) return null;
-            var cueInfoList = acbData.GetCueInfoList();
-            var cueNames = new string[cueInfoList.Length];
-
-            for (var i = 0; i < cueInfoList.Length; i++)
-                cueNames[i] = cueInfoList[i].name;
-
-            return cueNames;
         }
     }
 }
