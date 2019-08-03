@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Aless.MainSource.PlayOptions;
 using Aless.MainSource.SourcePool;
 using UnityEngine;
@@ -11,9 +12,9 @@ namespace Aless.MainSource
 
         [SerializeField] private bool _useObjectPoolInUniRx = false;
         [SerializeField] private CriAtomSource _sourcePrefab = null;
-        [SerializeField] private string _cueSheetName = null;
+        [SerializeField] private string[] _cueSheetNames = null;
 
-        private CriAtomExAcb _cueAcb;
+        private CriAtomExAcb[] _cueAcbArray;
 
         private IObjectPool _sourcePool;
 
@@ -35,7 +36,11 @@ namespace Aless.MainSource
 
         private void Initialize()
         {
-            _cueAcb = CriAtom.GetAcb(_cueSheetName);
+            _cueAcbArray = new CriAtomExAcb[_cueSheetNames.Length];
+            for (var i = 0; i < _cueAcbArray.Length; i++)
+            {
+                _cueAcbArray[i] = CriAtom.GetAcb(_cueSheetNames[i]);
+            }
 
             if (_useObjectPoolInUniRx)
                 _sourcePool = new AtomSourcePoolOnUniRx(_sourcePrefab.gameObject);
@@ -64,31 +69,103 @@ namespace Aless.MainSource
             }
         }
 
-        // サウンド再生(volume, pitch設定可能)
+        // サウンド再生(option設定可能)
         public static void PlayAudio(string key, params IPlayOption[] options)
         {
             _instance?.playAudio(key, options);
         }
 
+        // サウンド再生(option設定可能)
+        public static void PlayAudio(string sheetName, string key, params IPlayOption[] options)
+        {
+            _instance?.playAudio(key, sheetName, options);
+        }
+
         private void playAudio(string key, params IPlayOption[] options)
         {
-            if (!_cueAcb.Exists(key))
+//            var targetAcb = _cueAcbArray.FirstOrDefault(cueAcb => cueAcb.Exists(key));
+
+            CriAtomExAcb targetAcb = null;
+            string targetSheetName = null;
+            
+            for (var i = 0; i < _cueAcbArray.Length; i++)
+            {
+                if (!_cueAcbArray[i].Exists(key)) continue;
+                targetAcb = _cueAcbArray[i];
+                targetSheetName = _cueSheetNames[i];
+            }
+
+            if (targetAcb == null || targetSheetName == null)
             {
 #if DEBUG
-                UnityEngine.Debug.Log("Cue Not Found! :" + key);
+                UnityEngine.Debug.LogWarning("Cue Not Found! :" + key);
 #endif
                 return;
             }
 
             var source = _sourcePool.Rent();
-            source.cueSheet = _cueSheetName;
+            source.cueSheet = targetSheetName;
             source.cueName = key;
 
             foreach (var option in options)
             {
                 option.ApplySetting(source);
             }
+
+            source.Play();
+
+            _activeSources.Add(source);
+        }
+        
+        private void playAudio(string key, string targetSheetName, params IPlayOption[] options)
+        {
+            CriAtomExAcb targetAcb = null;
             
+            if (targetSheetName != null)
+            {
+                for (var i = 0; i < _cueAcbArray.Length; i++)
+                {
+                    if (!targetSheetName.Equals(_cueSheetNames[i])) continue;
+                    
+                    targetAcb = _cueAcbArray[i];
+                    break;
+                }
+            }
+            else
+            {
+                foreach (var cueAcb in _cueAcbArray)
+                {
+                    if (!cueAcb.Exists(key)) continue;
+                    targetAcb = cueAcb;
+                    break;
+                }
+            }
+
+            if (targetAcb == null)
+            {
+#if DEBUG
+                UnityEngine.Debug.LogWarning("Acb Not Found: " + targetSheetName);
+#endif
+                return;
+            }
+
+            if (!targetAcb.Exists(key))
+            {
+#if DEBUG
+                UnityEngine.Debug.LogWarning("Cue Not Found! :" + key);
+#endif
+                return;
+            }
+
+            var source = _sourcePool.Rent();
+            source.cueSheet = targetSheetName;
+            source.cueName = key;
+
+            foreach (var option in options)
+            {
+                option.ApplySetting(source);
+            }
+
             source.Play();
 
             _activeSources.Add(source);
