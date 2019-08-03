@@ -116,30 +116,18 @@ namespace Aless.MainSource
 
             _activeSources.Add(source);
         }
-        
-        private void playAudio(string key, string targetSheetName, params IPlayOption[] options)
+
+        private void playAudio(string targetSheetName, string key, params IPlayOption[] options)
         {
-            CriAtomExAcb targetAcb = null;
-            
-            if (targetSheetName != null)
+            if (targetSheetName == null)
             {
-                for (var i = 0; i < _cueAcbArray.Length; i++)
-                {
-                    if (!targetSheetName.Equals(_cueSheetNames[i])) continue;
-                    
-                    targetAcb = _cueAcbArray[i];
-                    break;
-                }
+#if DEBUG
+                UnityEngine.Debug.LogWarning("SheetName is Null.");
+#endif
+                return;
             }
-            else
-            {
-                foreach (var cueAcb in _cueAcbArray)
-                {
-                    if (!cueAcb.Exists(key)) continue;
-                    targetAcb = cueAcb;
-                    break;
-                }
-            }
+
+            var targetAcb = _cueAcbArray.Where((t, i) => targetSheetName.Equals(_cueSheetNames[i])).FirstOrDefault();
 
             if (targetAcb == null)
             {
