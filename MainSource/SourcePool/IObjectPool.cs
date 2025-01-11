@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace AdxSePlayer.SourcePool
+namespace Aless.MainSource.SourcePool
 {
     public interface IObjectPool
     {

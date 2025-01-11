@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace AdxSePlayer.SourcePool
+namespace Aless.MainSource.SourcePool
 {
     public class AtomSourcePool : IObjectPool
     {
